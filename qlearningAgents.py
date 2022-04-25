@@ -27,7 +27,7 @@ class QLearningAgent(ReinforcementAgent):
         self.table_file = open("qtable.txt", "r+")
 #        self.table_file_csv = open("qtable.csv", "r+")        
         self.q_table = self.readQtable()
-        self.epsilon = 1
+        self.epsilon = 0.05
 
     def readQtable(self):
         "Read qtable from disc"
@@ -171,10 +171,12 @@ class QLearningAgent(ReinforcementAgent):
 #         action_column = self.actions[action]
 #         print("Corresponding Q-table cell to update:", position, action_column)
 
-        
-        
-        "*** YOUR CODE HERE ***"
-
+        currentState = (state[0], state[1])
+        if currentState == (4,2) or currentState == (4,3):
+            self.q_table[self.computePosition(state)][self.actions[action]] = (1-self.alpha)*self.getQValue(state, action) + self.alpha*reward
+        else:
+            self.q_table[self.computePosition(state)][self.actions[action]] = (1-self.alpha)*self.getQValue(state, action) + self.alpha*(reward + self.discount*self.computeValueFromQValues(nextState))
+            
         # TRACE for updated q-table. Comment the following lines if you do not want to see that trace
 #         print("Q-table:")
 #         self.printQtable()
